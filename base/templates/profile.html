@@ -1248,6 +1248,7 @@ My Profile
                 var tableBody = $('#proCoursesTable tbody');
                 tableBody.empty(); // clear existing rows if any
                 // iterate through the data and append to the table
+                console.log(data)
                 for (var i = 0; i < data[1].length; i++) {
                     var Qualification_Name = data[1][i].Qualification_Name;
                     var Section_Level = data[1][i].Section_Level;
@@ -1865,12 +1866,23 @@ My Profile
                             theme: 'dark',
                             icon: 'las la-exclamation',
                             title: 'Error',
-                            message: data['message'],
+                            message: data['error'],
                             position: 'topRight',
                             progressBarColor: '#ff0800',
                         });
                     }
                     loadAcademicData();
+                },
+                error: function (error) {
+                    console.log(error);
+                    iziToast.show({
+                        theme: 'dark',
+                        icon: 'las la-exclamation',
+                        title: 'Error',
+                        message: data['error'],
+                        position: 'topRight',
+                        progressBarColor: '#ff0800',
+                    });
                 }
             })
         });
@@ -1980,9 +1992,9 @@ My Profile
                     myAction: 'insert',
                 },
                 success: function (data) {
-                    $("#proQualificationCode").val("")
-                    $("#pro_sectionLevel").val("")
-                    $("#proQulification").val("")
+                    $("#proQualificationCode").val("");
+                    $("#pro_sectionLevel").val("");
+                    $("#proQulification").val("");
                     if (data['success'] == true) {
                         iziToast.show({
                             theme: 'dark',
