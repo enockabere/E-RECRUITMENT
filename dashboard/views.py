@@ -60,6 +60,7 @@ class Detail(UserObjectMixins, View):
             Dashboard = False
             Profile = False
             ContactPage = False
+            E_response = []
             if "authenticated" in request.session:
                 authenticated = request.session["authenticated"]
                 if "Name" in request.session:

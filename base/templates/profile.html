@@ -14,7 +14,7 @@ My Profile
 
 {% block navigation %}
 <li class="nav-item active">
-    <a href="#" type="button" class="nav-link">
+    <a href="{% url 'Profile' %}" type="button" class="nav-link">
         <i class="fas fa-user br"></i>
         Profile
     </a>
@@ -98,10 +98,15 @@ My Profile
                             </label>
                         </li>
                     </ul>
-
+                    <div class="money-spinner mx-auto text-center" id="finish_loader" style="display: none;">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"
+                            alt="Loading Gif" style="height: 100px;" class="img-fluid">
+                    </div>
                     <div class="buttons my-4">
                         <button id="prevBtn" class="btn"><i class="las la-angle-double-left"></i>Prev</button>
                         <button id="nextBtn" class="btn">Next <i class="las la-angle-double-right"></i></button>
+                        <button id="finishBtn" class="btn btn-warning">Submit Profile <i
+                                class="las la-arrow-right"></i></button>
                     </div>
                     <div class="content">
                         <section>
@@ -299,7 +304,7 @@ My Profile
                                             value="{{applicant.Residential_Address}}" autofocus>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn button-88 my-3 w-100">Submit <i
+                                <button type="submit" class="btn button-88 my-3 w-100">Save <i
                                         class="las la-arrow-right"></i></button>
                             </form>
                         </section>
@@ -423,10 +428,9 @@ My Profile
                                             <option value="True">Yes</option>
                                         </select>
                                     </div>
-                                    <div class="form-group col-6">
+                                    <div class="form-group col-6" style="display: none;" id="grade_col">
                                         <label for="frist_name">Grade</label>
-                                        <input type="text" class="form-control" name="grade" id="Aca_grade" autofocus
-                                            required>
+                                        <input type="text" class="form-control" name="grade" id="Aca_grade" disabled>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -443,7 +447,7 @@ My Profile
                                         alt="Loading Gif" style="height: 100px;" class="img-fluid">
                                 </div>
                                 <p id="output" class="my-3" style="color:#e51e25;font-weight: bolder;"></p>
-                                <button type="submit" class="btn button-88 w-100 my-3">Submit</button>
+                                <button type="submit" class="btn button-88 w-100 my-3">Save</button>
                             </form>
                             <table id="AcademicQualificationsTable" class="table table-striped">
                                 <thead>
@@ -506,17 +510,6 @@ My Profile
                                             required autofocus>
                                     </div>
                                     <div class="form-group col-4">
-                                        <label>Industry<span class="text-danger">*</span></label>
-                                        <select class="form-control select2" name="industry" id="job_industry" required>
-                                            <option selected disabled value="">Choose...</option>
-                                            {% for industry in industry %}
-                                            <option value="{{industry.Code}}">{{industry.Description}}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="form-group col-4">
                                         <label>Hierarchy Level<span class="text-danger">*</span></label>
                                         <select class="form-control select2" name="hierarchyLevel"
                                             id="job_hierarchyLevel" required>
@@ -530,6 +523,26 @@ My Profile
                                             <option value="7">Support Staff</option>
                                             <option value="8">Intern</option>
                                             <option value="9">Trainee/Attachee</option>
+                                            <option value="10">Other</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="row" id="other_hierarchyLevelRow" style="display: none;">
+                                    <div class="form-group col-12">
+                                        <label for="">Other Hierarchy Level</label>
+                                        <input type="text" class="form-control" name="other_hierarchyLevel"
+                                            id="other_hierarchyLevel" disabled>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-4">
+                                        <label>Industry<span class="text-danger">*</span></label>
+                                        <select class="form-control select2" name="industry" id="job_industry" required>
+                                            <option selected disabled value="">Choose...</option>
+                                            {% for industry in industry %}
+                                            <option value="{{industry.Code}}">{{industry.Description}}</option>
+                                            {% endfor %}
                                         </select>
                                     </div>
                                     <div class="form-group col-4">
@@ -571,7 +584,7 @@ My Profile
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-12">
-                                        <label>Description</label>
+                                        <label>Summary of Roles and Responsibilities</label>
                                         <textarea class="form-control summernote-simple" name="description" rows="3"
                                             id="job_description">
 
@@ -583,7 +596,7 @@ My Profile
                                         alt="Loading Gif" style="height: 100px;" class="img-fluid">
                                 </div>
                                 <p id="jobOutput" class="my-3" style="color:#e51e25;font-weight: bolder;"></p>
-                                <button type="submit" class="btn button-88 my-3 w-100">Submit</button>
+                                <button type="submit" class="btn button-88 my-3 w-100">Save</button>
                             </form>
                             <table id="ExperienceTable" class="table table-striped ">
                                 <thead>
@@ -626,7 +639,7 @@ My Profile
                                         </select>
                                     </div>
                                     <div class="form-group col-6">
-                                        <label>Section Level<span class="text-danger">*</span></label>
+                                        <label>Section/Level(where applicable)</label>
                                         <select class="form-control select2" name="sectionLevel" id="pro_sectionLevel"
                                             required>
                                             <option selected value="0">Choose...</option>
@@ -656,7 +669,7 @@ My Profile
                                 </div>
                                 <p id="proOutput" class="my-3" style="color:#e51e25;font-weight: bolder;"></p>
 
-                                <button type="submit" class="btn button-88 my-3 w-100">Submit</button>
+                                <button type="submit" class="btn button-88 my-3 w-100">Save</button>
                             </form>
                             <table id="proCoursesTable" class="table table-striped">
                                 <thead>
@@ -711,7 +724,7 @@ My Profile
                                 </div>
                                 <p id="msOutput" class="my-3" style="color:#e51e25;font-weight: bolder;"></p>
 
-                                <button type="submit" class="btn button-88 my-3 w-100">Submit</button>
+                                <button type="submit" class="btn button-88 my-3 w-100">Save</button>
 
                             </form>
                             <table id="proMembersTable" class="table table-striped">
@@ -749,7 +762,7 @@ My Profile
                                         alt="Loading Gif" style="height: 100px;" class="img-fluid">
                                 </div>
                                 <p id="hobbyOutput" class="my-3" style="color:#e51e25;font-weight: bolder;"></p>
-                                <button type="submit" class="btn button-88 my-3 w-100">Submit</button>
+                                <button type="submit" class="btn button-88 my-3 w-100">Save</button>
                             </form>
                             <table id="hobbyTable" class="table table-striped">
                                 <thead>
@@ -805,7 +818,7 @@ My Profile
                                         alt="Loading Gif" style="height: 100px;" class="img-fluid">
                                 </div>
                                 <p id="innerefree" class="my-3" style="color:#e51e25;font-weight: bolder;"></p>
-                                <button type="submit" class="btn button-88 my-3 w-100">Submit</button>
+                                <button type="submit" class="btn button-88 my-3 w-100" id="refereeSubmit">Save</button>
                             </form>
                             <table id="refereeTable" class="table table-striped">
                                 <thead>
@@ -838,16 +851,75 @@ My Profile
 </section>
 <script>
     const nextBtn = document.getElementById("nextBtn");
+    const finishBtn = document.getElementById("finishBtn");
     const prevBtn = document.getElementById("prevBtn");
     const tabs = document.querySelectorAll(".tabs > input");
     const lastTab = tabs.length - 1;
     let currentTab = 0;
+    // Get the education type select element
+    var educationTypeSelect = $("#Aca_educationType");
+    var job_hierarchyLevelSelect = $("#job_hierarchyLevel");
+
+    // Get the grade_col and Aca_grade elements
+    var other_hierarchyLevelRow = $("#other_hierarchyLevelRow");
+    var other_hierarchyLevel = $("#other_hierarchyLevel");
+
+    educationTypeSelect.change(function () {
+        var selectedValue = $(this).val();
+
+        // If selected options are "1" or "2", show grade_col and enable Aca_grade
+        if (selectedValue === "1" || selectedValue === "2") {
+            gradeCol.show(500);
+            acaGradeInput.prop("disabled", false);
+        } else {
+            gradeCol.hide(500);
+            acaGradeInput.prop("disabled", true);
+        }
+    });
+
+    job_hierarchyLevelSelect.change(function () {
+        var selectValue = $(this).val();
+
+        // If selected options are "1" or "2", show grade_col and enable Aca_grade
+        if (selectValue === "10") {
+            other_hierarchyLevelRow.show(600);
+            other_hierarchyLevel.prop("disabled", false);
+        } else {
+            other_hierarchyLevelRow.hide(600);
+            other_hierarchyLevel.prop("disabled", true);
+        }
+    });
+
+    $(document).ready(function () {
+        $('#finishBtn').click(function () {
+            // Show the loader
+            $('#finish_loader').show();
+
+            // Delay for 2 seconds and then redirect
+            setTimeout(function () {
+                window.location.href = "/dashboard/";
+                iziToast.show({
+                    theme: 'dark',
+                    backgroundColor: '#239B56',
+                    icon: 'las la-check-circle',
+                    message: "submitted successfully",
+                    position: 'topRight',
+                    progressBarColor: '#F4F6F7',
+                });
+            }, 2000);
+        });
+    });
+
+
+
 
     function showHideNextBtn() {
         if (currentTab === lastTab) {
             nextBtn.style.display = "none";
+            finishBtn.style.display = "";
         } else {
             nextBtn.style.display = "";
+            finishBtn.style.display = "None";
         }
     }
 
@@ -1115,6 +1187,11 @@ My Profile
                         name: 'hierarchyLevel',
                         value: "0"
                     });
+                    var e_other_hierarchyLevel = $('<input>').attr({
+                        type: 'hidden',
+                        name: 'other_hierarchyLevel',
+                        value: "0"
+                    });
                     var e_functionalArea = $('<input>').attr({
                         type: 'hidden',
                         name: 'functionalArea',
@@ -1215,7 +1292,8 @@ My Profile
                     });
 
                     var td = $('<td>').append(form.append(e_startDate, e_endDate, e_employer,
-                        e_industry, e_hierarchyLevel, e_functionalArea, e_jobTitle,
+                        e_industry, e_hierarchyLevel, e_other_hierarchyLevel, e_functionalArea,
+                        e_jobTitle,
                         e_isPresentEmployment, e_country, e_location, e_employerEmail,
                         e_employerPostalAddress, e_description, e_lineNoInput, e_myActionInput,
                         e_submitBtn));
@@ -1713,6 +1791,14 @@ My Profile
                     row.append(td);
                     tableBody.append(row);
                 }
+                // Add an if condition to check the number of rows
+                if (tableBody.children().length >= 3) {
+                    $('#refereeSubmit').prop('disabled', true).text(
+                        'You can add up to a maximum of three referees');
+                } else {
+                    $('#refereeSubmit').prop('disabled', false).text('Save');
+                }
+
                 // initialize DataTables for each table
                 if (!$.fn.DataTable.isDataTable('#refereeTable')) {
                     $('#refereeTable').DataTable({
@@ -1911,6 +1997,7 @@ My Profile
                     employer: $("#job_employer").val(),
                     industry: $("#job_industry").val(),
                     hierarchyLevel: $("#job_hierarchyLevel").val(),
+                    other_hierarchyLevel: $("#other_hierarchyLevel").val(),
                     functionalArea: $("#job_functionalArea").val(),
                     jobTitle: $("#job_jobTitle").val(),
                     isPresentEmployment: $("#isPresentEmployment").val(),
@@ -1928,7 +2015,7 @@ My Profile
                     $("#job_endDate").val("")
                     $("#job_employer").val("")
                     $("#job_industry").val("")
-                    $("#job_hierarchyLevel").val("")
+                    $("#job_hierarchyLevel, #other_hierarchyLevel").val("")
                     $("#job_functionalArea").val("")
                     $("#job_jobTitle").val("")
                     $("#isPresentEmployment").val("")

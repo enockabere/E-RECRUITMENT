@@ -86,17 +86,26 @@
                     <div class="p-4 text-white text-lg bg-info rounded-top">
                         <h2 class="left-align">{{res.Description}}</h2>
                     </div>
-                    <div class="d-flex flex-wrap flex-sm-nowrap justify-content-between py-3 px-2 bg-secondary">
-                        <div class="w-100 text-center py-1 px-2"><span class="text-medium">
-                                Education Level:</span> {{Qualifications.Education_Level}}
+                    <div class="d-flex justify-content-between py-3 px-2 bg-secondary">
+                        <div class="w-50 py-1 px-2">
+                            <span class="text-medium font-weight-bold">Job Requirements</span>
+                            <ul>
+                                <li>
+                                    <span class="text-medium">Education Level:</span> {{Qualifications.Education_Level}}
+                                </li>
+                                <li>
+                                    <span class="text-medium">Year(s) Relevant Work Experience:</span>
+                                    {{experience.No__of_Years}}
+                                </li>
+                            </ul>
                         </div>
-                        <div class="w-100 text-center py-1 px-2"><span class="text-medium">
-                                Appointment Type:</span> <span>{{res.Appointment_Type}}</span>
+                        <div class="w-50 py-1 text-right">
+                            <span class="text-medium font-weight-bold">Appointment Type:</span> {{res.Appointment_Type}}
                         </div>
-                        <div class="w-100 text-center py-1 px-2"><span class="text-medium"> Year(s) Relevant Work
-                                Experience
-                                :</span> {{experience.No__of_Years}}
-                        </div>
+                    </div>
+
+                    <div class="d-flex py-1 px-2">
+
                     </div>
                     <div class="card-body">
                         <div class="row" id="itemsTable">
@@ -116,10 +125,10 @@
                                 </ol>
                                 {% endif %}
                                 {% if qualify|length > 0 %}
-                                <h4 class="section-title mt-3">Qualifications</h4>
+                                <h4 class="section-title mt-3">Academic Qualifications</h4>
                                 <ol>
                                     {% for qualify in qualify %}
-                                    <li><span>{{qualify.Education_Level}}</span> - {{qualify.Field_Name}}</li>
+                                    <li><span>{{qualify.Education_Level}}</span> - {{qualify.Qualification_Name}}</li>
                                     {% endfor %}
                                 </ol>
                                 {% endif %}
@@ -255,8 +264,9 @@
                                     </h5>
                                     {% csrf_token %}
                                     <div style="display:flex; justify-content:space-between;" class="my-3">
-                                        <button type="submit" class="btn btn-primary btn-lg mr-1" style="flex:1;">
-                                            Submit {{response.Process_Type}} <i class="fas fa-paper-plane"></i>
+                                        <button type="submit" id="submit_offer" class="btn btn-danger btn-lg mr-1"
+                                            style="flex:1;" disabled>
+                                            Please Upload All Required Attachments <i class="fas fa-paper-plane"></i>
                                         </button>
                                     </div>
                                 </form>
@@ -334,10 +344,13 @@
                         $("#attachmentsForm select[name='attachmentCode']").find('.after').after(
                             options);
                     } else {
+                        $("#submit_offer").prop('disabled', false).removeClass("btn-danger")
+                            .addClass("btn-primary").text('Submit Application');
                         const emptyOption =
                             '<option disabled selected>You have nothing to attach</option>';
                         $("#attachmentForm select[name='attachmentCode']").find('.after').after(
                             emptyOption);
+
                     }
                 },
                 error: function (xhr, status, error) {
